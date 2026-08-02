@@ -14,7 +14,7 @@ app.use(router);
 /**
  * Component Stacks
  */
-import { installComponentStack } from './packages/component-stack/plugin';
+import { installComponentStack } from './core/component-stack/plugin';
 installComponentStack(app);
 
 app.mount('#app');
