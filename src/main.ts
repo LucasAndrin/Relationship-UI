@@ -11,4 +11,10 @@ const app = createApp(App);
 app.use(createPinia());
 app.use(router);
 
+/**
+ * Component Stacks
+ */
+import { installComponentStack } from './packages/component-stack/plugin';
+installComponentStack(app);
+
 app.mount('#app');
