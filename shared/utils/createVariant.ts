@@ -49,6 +49,20 @@ export interface VariantComposer<
 	defaultVariants: VariantDefinition<TVariants>['defaultVariants']
 }
 
+type VariantKey<T> =
+	keyof T extends 'true' | 'false'
+		? boolean
+		: keyof T
+
+export type VariantProps<
+	T extends {
+		variants: VariantSchema
+	},
+> = {
+	[K in keyof T['variants']]?:
+		VariantKey<T['variants'][K]>
+}
+
 export function createVariants<
 	TVariants extends VariantSchema
 >(
