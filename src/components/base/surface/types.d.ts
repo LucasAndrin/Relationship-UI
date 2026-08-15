@@ -1,7 +1,3 @@
-import type { surfaceVariants } from './surface.variants';
-import type { VariantProps } from '@/shared/utils'
-import { surfaceVariants } from './surface.variants'
-
 export type SurfaceVariant =
     | 'filled'
     | 'outlined'
@@ -21,11 +17,11 @@ export type SurfaceShadow =
     | 'lg'
     | 'xl'
 
-export type SurfaceElement =
-    | string
-    | Component
-
-export interface SurfaceProps extends VariantProps<typeof surfaceVariants> {
-    as?: SurfaceElement
+export type SurfaceProps = {
+    as?: string
     class?: string
+    variant?: SurfaceVariant
+    rounded?: SurfaceRounded
+    shadow?: SurfaceShadow
 }
+
