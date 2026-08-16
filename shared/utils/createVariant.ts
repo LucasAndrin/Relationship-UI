@@ -4,7 +4,7 @@ type VariantValue = string | number | boolean
 
 export type VariantSchema = Record<
 	string,
-	Record<string, ClassValue>
+	Record<string, ClassValue|ClassValue[]>
 >
 
 export interface CompoundVariant<
@@ -20,9 +20,9 @@ export interface CompoundVariant<
 }
 
 export interface VariantDefinition<
-	TVariants extends VariantSchema
+	TVariants extends VariantSchema = VariantSchema
 > {
-	base?: ClassValue
+	base?: ClassValue|ClassValue[]
 
 	variants: TVariants
 
@@ -60,9 +60,12 @@ export function createVariants<
 		} = {},
 	): string {
 		const classes: ClassValue[] = []
-
 		if (definition.base) {
-			classes.push(definition.base)
+			if (Array.isArray(definition.base)) {
+				classes.push(...definition.base);
+			} else {
+				classes.push(definition.base)
+			}
 		}
 
 		for (const variantName in definition.variants) {
@@ -83,7 +86,11 @@ export function createVariants<
 				variantGroup[String(value)]
 
 			if (variantClass) {
-				classes.push(variantClass)
+				if (Array.isArray(variantClass)) {
+					classes.push(...variantClass);
+				} else {
+					classes.push(variantClass)
+				}
 			}
 		}
 
