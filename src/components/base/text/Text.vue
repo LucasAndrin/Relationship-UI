@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-
 import { textVariants } from './text.variants'
-
 import type { TextProps } from './types'
 
 const props = withDefaults(
@@ -19,7 +17,7 @@ const classes = computed(() =>
 
 <template>
 	<component
-		:is="props.as"
+		:is="as"
 		:class="classes"
 	>
 		<slot />
