@@ -16,5 +16,7 @@ export type ModalProps = {
 
 	locked?: boolean
 
+	scrollLocked?: boolean
+
 	class?: string
 }

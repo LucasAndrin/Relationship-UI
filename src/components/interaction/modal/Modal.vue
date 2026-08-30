@@ -16,6 +16,7 @@ import Portal from '../primitives/portal/Portal.vue'
 import { modalVariants } from './modal.variants'
 
 import type { ModalProps } from './types'
+import { useScrollLock } from '../primitives/scroll-lock/useScrollLock.js'
 
 const props = withDefaults(
 	defineProps<ModalProps>(),
@@ -25,6 +26,7 @@ const props = withDefaults(
 		closeOnOverlay: true,
 		closeOnEscape: true,
 		locked: false,
+		scrollLocked: true,
 	},
 )
 
@@ -59,6 +61,10 @@ useFocusTrap(
 		initialFocus: 'first',
 	},
 )
+
+useScrollLock({
+	active: computed(() => isOpen.value && props.scrollLocked),
+})
 
 function close() {
 	if (props.locked) {
