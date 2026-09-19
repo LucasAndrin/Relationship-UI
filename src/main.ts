@@ -17,4 +17,10 @@ app.use(router);
 import { installComponentStack } from './core/component-stack/plugin';
 installComponentStack(app);
 
+/**
+ * Window Manager
+ */
+import { createWindowManager } from './core/window-manager/plugin';
+app.use(createWindowManager())
+
 app.mount('#app');
