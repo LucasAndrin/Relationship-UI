@@ -94,23 +94,35 @@ const style = computed(() => {
 			}"
 			@mousedown="draggable && !maximized && start($event)"
 		>
-            <span class="truncate font-medium">
-                {{ title }}
-            </span>
+			<div class="min-w-0 flex-1">
+				<slot name="header">
+					<span class="truncate font-medium">
+						{{ title }}
+					</span>
+				</slot>
+			</div>
 
-            <div class="flex items-center gap-1">
-                <button type="button" @mousedown.stop @click="emit('minimize')">
-					-
-				</button>
+			<div class="flex shrink-0 items-center gap-1" @mousedown.stop>
+				<slot name="header-actions"></slot>
 
-                <button type="button" @mousedown.stop @click="props.maximized ? emit('restore') : emit('maximize')">
-                    □
-                </button>
+				<slot name="header-button-minimize">
+					<button type="button" @mousedown.stop @click="emit('minimize')">
+						-
+					</button>
+				</slot>
 
-                <button type="button" @mousedown.stop @click="emit('close')">
-                    x
-                </button>
-            </div>
+				<slot name="header-button-maximize">
+					<button type="button" @mousedown.stop @click="props.maximized ? emit('restore') : emit('maximize')">
+						□
+					</button>
+				</slot>
+
+				<slot name="header=button-close">
+					<button type="button" @mousedown.stop @click="emit('close')">
+						x
+					</button>
+				</slot>
+			</div>
         </header>
 
 		<main v-show="!minimized" class="min-h-0 flex-1 overflow-auto">
