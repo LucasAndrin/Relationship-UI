@@ -6,6 +6,8 @@ import type { WindowPosition, WindowSize } from '@/src/core/window-manager';
 import { useWindowDrag } from './useWindowDrag';
 import { useWindowResize } from './useWindowResize';
 
+import Button from '../../base/button/Button.vue';
+
 const props = withDefaults(defineProps<WindowProps>(), {
 	title: 'Window',
 	minimized: false,
@@ -80,7 +82,7 @@ const style = computed(() => {
 		:style="style"
 		:class="cn(
 			'absolute flex flex-col overflow-hidden',
-			'rounded-lg border bg-white shadow-xl',
+			'rounded-lg border bg-white dark:bg-slate-900 shadow-xl',
 			props.class,
 		)"
 		@mousedown="emit('focus')"
@@ -96,7 +98,7 @@ const style = computed(() => {
 		>
 			<div class="min-w-0 flex-1">
 				<slot name="header">
-					<span class="truncate font-medium">
+					<span class="truncate font-medium dark:text-slate-100">
 						{{ title }}
 					</span>
 				</slot>
@@ -106,21 +108,21 @@ const style = computed(() => {
 				<slot name="header-actions"></slot>
 
 				<slot name="header-button-minimize">
-					<button type="button" @mousedown.stop @click="emit('minimize')">
+					<Button type="button" size="sm" @mousedown.stop @click="emit('minimize')">
 						-
-					</button>
+					</Button>
 				</slot>
 
 				<slot name="header-button-maximize">
-					<button type="button" @mousedown.stop @click="props.maximized ? emit('restore') : emit('maximize')">
+					<Button type="button" size="sm" @mousedown.stop @click="props.maximized ? emit('restore') : emit('maximize')">
 						□
-					</button>
+					</Button>
 				</slot>
 
-				<slot name="header=button-close">
-					<button type="button" @mousedown.stop @click="emit('close')">
+				<slot name="header-button-close">
+					<Button type="button" size="sm" @mousedown.stop @click="emit('close')">
 						x
-					</button>
+					</Button>
 				</slot>
 			</div>
         </header>
