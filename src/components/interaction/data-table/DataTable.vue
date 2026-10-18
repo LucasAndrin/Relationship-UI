@@ -18,16 +18,22 @@ defineOptions({
 	inheritAttrs: false,
 });
 
-const props = withDefaults(defineProps<DataTableProps<T>>(), {
-	loading: false,
-	selectionMode: 'none',
-	selectedKeys: () => [],
-	sort: null,
+// TODO: Change to suport arrays of sorting
+const sort = defineModel<DataTableSort|null>('sort', {
+	default: null
 });
 
+const props = withDefaults(
+	defineProps<Omit<DataTableProps<T>, 'sort'>>(),
+	{
+		loading: false,
+		selectionMode: 'none',
+		selectedKeys: () => [],
+		sort: null,
+	}
+);
+
 const emit = defineEmits<{
-	'sort-change': [sort: DataTableSort | null];
-	'selection-change': [keys: DataTableRowKey[]];
 	'update:selectedKeys': [keys: DataTableRowKey[]]
 }>();
 
@@ -89,12 +95,12 @@ function requestSort(column: DataTableColumn<T>) {
 
 	let nextSort: DataTableSort | null;
 
-	if (props.sort?.key !== column.key) {
+	if (sort.value?.key !== column.key) {
 		nextSort = {
 			key: column.key,
 			direction: 'asc',
 		};
-	} else if (props.sort.direction === 'asc') {
+	} else if (sort.value.direction === 'asc') {
 		nextSort = {
 			key: column.key,
 			direction: 'desc',
@@ -103,24 +109,24 @@ function requestSort(column: DataTableColumn<T>) {
 		nextSort = null;
 	}
 
-	emit('sort-change', nextSort);
+	sort.value = nextSort;
 }
 
 function getSortIndicator(column: DataTableColumn<T>): string {
-	if (props.sort?.key !== column.key) {
+	if (sort.value?.key !== column.key) {
 		return '↕';
 	}
 
-	return props.sort.direction === 'asc' ? '↑' : '↓';
+	return sort.value.direction === 'asc' ? '↑' : '↓';
 }
 
 function getHeaderContext(
 	column: DataTableColumn<T>,
 ): DataTableHeaderContext<T> {
-	const sorted = props.sort?.key === column.key;
+	const sorted = sort.value?.key === column.key;
 
 	const direction: DataTableSortDirection | null = sorted
-		? props.sort.direction
+		? sort.value?.direction || null
 		: null;
 
 	return {
@@ -132,7 +138,6 @@ function getHeaderContext(
 }
 
 function updateSelection(keys: DataTableRowKey[]) {
-  emit('selection-change', keys)
   emit('update:selectedKeys', keys)
 }
 
@@ -235,12 +240,8 @@ function togglePageSelection() {
 							<slot
 								name="sort-icon"
 								:column="column"
-								:sorted="props.sort?.key === column.key"
-								:direction="
-									props.sort?.key === column.key
-										? props.sort.direction
-										: null
-								"
+								:sorted="sort?.key === column.key"
+								:direction="sort?.key === column.key ? sort.direction : null"
 							>
 								<span aria-hidden="true" class="text-slate-500 dark:text-slate-400">
 									{{ getSortIndicator(column) }}
